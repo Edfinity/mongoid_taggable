@@ -33,43 +33,50 @@ describe Mongoid::Taggable do
     context "by tagged_with" do
       let(:models){MyModel.tagged_with('interesting')}
       it "locates tagged objects" do
-        models.include?(model).should be_true
+        blah = model
+        models.include?(model).should == true
       end
     end
     context "by tagged_with_all using an array" do
       let(:models){MyModel.tagged_with_all(['interesting', 'good'])}
       it "locates tagged objects" do
-        models.include?(model).should be_true
+        blah = model
+        models.include?(model).should == true
       end
     end
     context "by tagged_with_all using strings" do
       let(:models){MyModel.tagged_with_all('interesting', 'good')}
       it "locates tagged objects" do
-        models.include?(model).should be_true
+        blah = model
+        models.include?(model).should == true
       end
     end
     context "by tagged_with_all when tag not included" do
       let(:models){MyModel.tagged_with_all('interesting', 'good', 'mcdonalds')}
       it "locates tagged objects" do
-        models.include?(model).should be_false
+        blah = model
+        models.include?(model).should == false
       end
     end
     context "by tagged_with_any using an array" do
       let(:models){MyModel.tagged_with_any(['interesting', 'mcdonalds'])}
       it "locates tagged objects" do
-        models.include?(model).should be_true
+        blah = model
+        models.include?(model).should == true
       end
     end
     context "by tagged_with_any using strings" do
       let(:models){MyModel.tagged_with_any('interesting', 'mcdonalds')}
       it "locates tagged objects" do
-        models.include?(model).should be_true
+        blah = model
+        models.include?(model).should == true
       end
     end
     context "by tagged_with_any when tag not included" do
       let(:models){MyModel.tagged_with_any('hardees', 'wendys', 'mcdonalds')}
       it "locates tagged objects" do
-        models.include?(model).should be_false
+        blah = model
+        models.include?(model).should == false
       end
     end
   end
@@ -142,7 +149,7 @@ describe Mongoid::Taggable do
     end
 
     it "should generate the index collection model based on model" do
-      MyModel.tags_index_collection.should be_a Moped::Collection
+      MyModel.tags_index_collection.should be_a Mongo::Collection
     end
 
     context "retrieving index" do
@@ -185,7 +192,7 @@ describe Mongoid::Taggable do
     end
 
     it 'should launch the map/reduce if index activate and tag_arrays change' do
-      m = MyModel.create!(:tags_array => "food,ant,bee")
+      m = MyModel.create!(:tags_array => "food,ant,bee".split(','))
       m.tags = 'juice,food'
       MyModel.should_receive(:save_tags_index!) {double("scope").as_null_object}
       m.save
